@@ -22,11 +22,11 @@ const BADGE_SIT: Record<string, { bg: string; color: string }> = {
   "Autre":         { bg: "rgba(255,255,255,0.07)", color: "var(--texte-sec)" },
 };
 
-const VIDE: Omit<Adherent,"id"|"dateInscription"> = {
-  nom:"",prenoms:"",ddn:"",lieuNaissance:"",village:"",quartier:"",
+const VIDE: Omit<Adherent,"id"|"date_inscription"> = {
+  nom:"",prenoms:"",ddn:"",lieu_naissance:"",village:"",quartier:"",
   contact:"",email:"",pays:"",continent:"Afrique",
   situation:"Étudiant",operateur:"",photo:"",
-  paye:false,datePaiement:"",notes:""
+  paye:false,date_paiement:"",notes:""
 };
 
 export default function Adherents() {
@@ -160,7 +160,7 @@ export default function Adherents() {
                         }
                         <div>
                           <div style={{ fontWeight:600, fontSize:13.5, color:"var(--texte)" }}>{a.nom} {a.prenoms}</div>
-                          <div style={{ fontSize:11, color:"var(--texte-ter)" }}>{a.dateInscription}</div>
+                          <div style={{ fontSize:11, color:"var(--texte-ter)" }}>{a.date_inscription}</div>
                         </div>
                       </div>
                     </td>
@@ -236,7 +236,7 @@ export default function Adherents() {
               </div>
 
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem" }}>
-                {([["nom","Nom *","text"],["prenoms","Prénoms *","text"],["ddn","Date de naissance","date"],["lieuNaissance","Lieu de naissance","text"],["quartier","Quartier","text"],["contact","Contact * (ex: +33 06 12...)","tel"],["email","Email","email"],["pays","Pays de résidence","text"],["notes","Notes","text"]] as const).map(([k,l,t]) => (
+                {([["nom","Nom *","text"],["prenoms","Prénoms *","text"],["ddn","Date de naissance","date"],["lieu_naissance","Lieu de naissance","text"],["quartier","Quartier","text"],["contact","Contact * (ex: +33 06 12...)","tel"],["email","Email","email"],["pays","Pays de résidence","text"],["notes","Notes","text"]] as const).map(([k,l,t]) => (
                   <div key={k} style={{ gridColumn: k === "notes" ? "1/-1" : undefined }}>
                     <label className="label">{l}</label>
                     <input className="champ" type={t} value={(form as unknown as Record<string,string>)[k] || ""} onChange={e => setForm(x => ({ ...x, [k]: e.target.value }))} />
@@ -341,7 +341,7 @@ export default function Adherents() {
               </div>
               {[
                 ["Né(e) le",           modalDetail.ddn || "—"],
-                ["Lieu de naissance",  modalDetail.lieuNaissance || "—"],
+                ["Lieu de naissance",  modalDetail.lieu_naissance || "—"],
                 ["Village d'origine",  modalDetail.village],
                 ["Quartier",           modalDetail.quartier || "—"],
                 ["Pays",               modalDetail.pays || "—"],
@@ -350,7 +350,7 @@ export default function Adherents() {
                 ["Email",              modalDetail.email || "—"],
                 ["Situation",          modalDetail.situation],
                 ["Opérateur",          modalDetail.operateur || "—"],
-                ["Date d'inscription", modalDetail.dateInscription],
+                ["Date d'inscription", modalDetail.date_inscription],
               ].map(([k,v]) => (
                 <div key={k} style={{ display:"flex", justifyContent:"space-between", padding:"9px 0", borderBottom:"1px solid var(--bordure)", fontSize:13.5 }}>
                   <span style={{ color:"var(--texte-ter)", fontWeight:500 }}>{k}</span>

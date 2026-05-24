@@ -26,7 +26,7 @@ export default function Cotisations() {
   };
 
   const togglePaiement = (id: string, paye: boolean) => {
-    updateAdherent(id, { paye: !paye, datePaiement: !paye ? new Date().toISOString().split("T")[0] : "" });
+    updateAdherent(id, { paye: !paye, date_paiement: !paye ? new Date().toISOString().split("T")[0] : "" });
     afficherToast(!paye ? "Paiement confirmé ✓" : "Paiement annulé");
   };
 
@@ -176,7 +176,7 @@ export default function Cotisations() {
                   <td style={{ fontSize:13, color:"var(--texte-sec)" }}>{a.village}</td>
                   <td style={{ fontSize:13, color:"var(--texte-sec)" }}>{a.pays || "—"}</td>
                   <td style={{ fontSize:12.5, color:"var(--texte-ter)" }}>{a.operateur || "—"}</td>
-                  <td style={{ fontSize:12.5, color:"var(--texte-ter)" }}>{a.datePaiement || "—"}</td>
+                  <td style={{ fontSize:12.5, color:"var(--texte-ter)" }}>{a.date_paiement || "—"}</td>
                   <td>
                     <div style={{ display:"flex", alignItems:"center", gap:6 }}>
                       {a.paye
