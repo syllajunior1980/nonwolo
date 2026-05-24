@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AJRN — Association des Jeunes Ressortissants du Nonwolo",
-  description: "Plateforme de gestion des adhérents de l'AJRN — accessible partout dans le monde",
+  title: "Mouvement 1000 Jeunes pour le Nonwolo — JN1000",
+  description: "Plateforme de gestion du Mouvement 1000 Jeunes pour le Nonwolo — 26 villages, une seule vision",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

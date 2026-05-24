@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import { useStore } from "@/lib/store";
 import Sidebar from "./components/Sidebar";
 import TableauDeBord from "./components/TableauDeBord";
@@ -8,15 +9,45 @@ import Messagerie from "./components/Messagerie";
 import Cotisations from "./components/Cotisations";
 
 export default function Page() {
-  const { activeTab } = useStore();
+  const { activeTab, chargerDonnees, chargement } = useStore();
+
+  useEffect(() => {
+    chargerDonnees();
+  }, []);
 
   const pages: Record<string, React.ReactNode> = {
     "tableau-de-bord": <TableauDeBord />,
-    "adherents": <Adherents />,
-    "villages": <Villages />,
-    "messagerie": <Messagerie />,
-    "paiements": <Cotisations />,
+    "adherents":       <Adherents />,
+    "villages":        <Villages />,
+    "messagerie":      <Messagerie />,
+    "paiements":       <Cotisations />,
   };
+
+  if (chargement) return (
+    <div style={{
+      display: "flex", alignItems: "center", justifyContent: "center",
+      minHeight: "100vh", flexDirection: "column", gap: 20,
+      background: "var(--fond)",
+    }}>
+      {/* Anneau animé */}
+      <div style={{
+        width: 52, height: 52,
+        borderRadius: "50%",
+        border: "3px solid rgba(201,168,76,0.15)",
+        borderTopColor: "var(--or)",
+        animation: "spin 0.9s linear infinite",
+      }} />
+      <div style={{ textAlign: "center" }}>
+        <div className="titre" style={{ color: "var(--or)", fontSize: 20, fontWeight: 600, letterSpacing: "0.5px" }}>
+          JN1000
+        </div>
+        <div style={{ color: "var(--texte-ter)", fontSize: 12.5, marginTop: 4 }}>
+          26 villages · une seule vision
+        </div>
+      </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+    </div>
+  );
 
   return (
     <div>
