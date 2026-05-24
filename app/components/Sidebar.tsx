@@ -88,7 +88,7 @@ export default function Sidebar() {
           <div style={{ position: "relative" }}>
             <img
               src={`data:image/jpeg;base64,${DIRECTEUR_B64}`}
-              alt="Directeur du projet"
+              alt="Honorable IK"
               style={{
                 width: 72, height: 72,
                 borderRadius: "50%",
@@ -106,7 +106,7 @@ export default function Sidebar() {
           </div>
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: "var(--or)", letterSpacing: "0.3px" }}>
-              Directeur du Projet
+              Honorable IK
             </div>
             <div style={{ fontSize: 10, color: "var(--texte-ter)", marginTop: 2, lineHeight: 1.4 }}>
               © 2025 AJRN · Tous droits réservés
