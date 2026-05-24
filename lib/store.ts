@@ -1,10 +1,9 @@
-"use client";
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type Situation = "Fonctionnaire" | "Chômeur" | "Ouvrier" | "Élève" | "Étudiant" | "Autre";
+export type Situation = "Fonctionnaire" | "ChÃ´meur" | "Ouvrier" | "Ã‰lÃ¨ve" | "Ã‰tudiant" | "Autre";
 export type Operateur = "Orange Money" | "Moov Money" | "Wave" | "";
-export type Continent = "Afrique" | "Europe" | "Amérique du Nord" | "Amérique du Sud" | "Asie" | "Océanie";
+export type Continent = "Afrique" | "Europe" | "AmÃ©rique du Nord" | "AmÃ©rique du Sud" | "Asie" | "OcÃ©anie";
 
 export interface Adherent {
   id: string;
@@ -61,19 +60,19 @@ interface Store {
 }
 
 const DEMO_ADHERENTS: Adherent[] = [
-  { id: "AJRN-0001", nom: "Koné", prenoms: "Mamadou", ddn: "1995-03-12", lieuNaissance: "Bouaké", village: "Nonwolo", quartier: "Koko", contact: "+225 07 01 23 45 67", email: "kone.m@gmail.com", pays: "Côte d'Ivoire", continent: "Afrique", situation: "Fonctionnaire", operateur: "Orange Money", photo: "", paye: true, datePaiement: "2025-01-10", dateInscription: "2025-01-10", notes: "" },
-  { id: "AJRN-0002", nom: "Ouattara", prenoms: "Fatoumata", ddn: "2001-07-25", lieuNaissance: "Nonwolo", village: "Gnégré", quartier: "Centre", contact: "+33 06 12 34 56 78", email: "fato.o@gmail.com", pays: "France", continent: "Europe", situation: "Étudiant", operateur: "Wave", photo: "", paye: true, datePaiement: "2025-01-15", dateInscription: "2025-01-12", notes: "" },
-  { id: "AJRN-0003", nom: "Coulibaly", prenoms: "Ibrahim", ddn: "1999-11-08", lieuNaissance: "Abidjan", village: "Kakolo", quartier: "Résidentiel", contact: "+1 212 555 0123", email: "ibra.c@gmail.com", pays: "États-Unis", continent: "Amérique du Nord", situation: "Chômeur", operateur: "Moov Money", photo: "", paye: false, datePaiement: "", dateInscription: "2025-02-01", notes: "" },
-  { id: "AJRN-0004", nom: "Traoré", prenoms: "Aminata", ddn: "1988-05-20", lieuNaissance: "Korhogo", village: "Tiébila", quartier: "Nord", contact: "+49 30 12345678", email: "ami.t@gmail.com", pays: "Allemagne", continent: "Europe", situation: "Fonctionnaire", operateur: "Orange Money", photo: "", paye: false, datePaiement: "", dateInscription: "2025-02-10", notes: "" },
-  { id: "AJRN-0005", nom: "Diallo", prenoms: "Moussa", ddn: "2003-09-14", lieuNaissance: "Nonwolo", village: "Zologo", quartier: "Sud", contact: "+225 05 99 88 77 66", email: "moussa.d@gmail.com", pays: "Côte d'Ivoire", continent: "Afrique", situation: "Élève", operateur: "Wave", photo: "", paye: true, datePaiement: "2025-03-01", dateInscription: "2025-03-01", notes: "" },
+  { id: "AJRN-0001", nom: "KonÃ©", prenoms: "Mamadou", ddn: "1995-03-12", lieuNaissance: "BouakÃ©", village: "Nonwolo", quartier: "Koko", contact: "+225 07 01 23 45 67", email: "kone.m@gmail.com", pays: "CÃ´te d'Ivoire", continent: "Afrique", situation: "Fonctionnaire", operateur: "Orange Money", photo: "", paye: true, datePaiement: "2025-01-10", dateInscription: "2025-01-10", notes: "" },
+  { id: "AJRN-0002", nom: "Ouattara", prenoms: "Fatoumata", ddn: "2001-07-25", lieuNaissance: "Nonwolo", village: "GnÃ©grÃ©", quartier: "Centre", contact: "+33 06 12 34 56 78", email: "fato.o@gmail.com", pays: "France", continent: "Europe", situation: "Ã‰tudiant", operateur: "Wave", photo: "", paye: true, datePaiement: "2025-01-15", dateInscription: "2025-01-12", notes: "" },
+  { id: "AJRN-0003", nom: "Coulibaly", prenoms: "Ibrahim", ddn: "1999-11-08", lieuNaissance: "Abidjan", village: "Kakolo", quartier: "RÃ©sidentiel", contact: "+1 212 555 0123", email: "ibra.c@gmail.com", pays: "Ã‰tats-Unis", continent: "AmÃ©rique du Nord", situation: "ChÃ´meur", operateur: "Moov Money", photo: "", paye: false, datePaiement: "", dateInscription: "2025-02-01", notes: "" },
+  { id: "AJRN-0004", nom: "TraorÃ©", prenoms: "Aminata", ddn: "1988-05-20", lieuNaissance: "Korhogo", village: "TiÃ©bila", quartier: "Nord", contact: "+49 30 12345678", email: "ami.t@gmail.com", pays: "Allemagne", continent: "Europe", situation: "Fonctionnaire", operateur: "Orange Money", photo: "", paye: false, datePaiement: "", dateInscription: "2025-02-10", notes: "" },
+  { id: "AJRN-0005", nom: "Diallo", prenoms: "Moussa", ddn: "2003-09-14", lieuNaissance: "Nonwolo", village: "Zologo", quartier: "Sud", contact: "+225 05 99 88 77 66", email: "moussa.d@gmail.com", pays: "CÃ´te d'Ivoire", continent: "Afrique", situation: "Ã‰lÃ¨ve", operateur: "Wave", photo: "", paye: true, datePaiement: "2025-03-01", dateInscription: "2025-03-01", notes: "" },
 ];
 
 const DEMO_VILLAGES: Village[] = [
   { id: "v1", nom: "Nonwolo", region: "Centre" },
-  { id: "v2", nom: "Gnégré", region: "Nord" },
+  { id: "v2", nom: "GnÃ©grÃ©", region: "Nord" },
   { id: "v3", nom: "Kakolo", region: "Est" },
   { id: "v4", nom: "Zologo", region: "Ouest" },
-  { id: "v5", nom: "Tiébila", region: "Sud" },
+  { id: "v5", nom: "TiÃ©bila", region: "Sud" },
 ];
 
 function nextId(adherents: Adherent[]) {
