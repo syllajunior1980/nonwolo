@@ -106,8 +106,7 @@ export default function Cotisations() {
           </h2>
           <div style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 16px", background:"var(--or-pale)", border:"1px solid var(--or-bordure)", borderRadius:12, flexWrap:"wrap" }}>
             <div style={{ fontSize:13, color:"var(--texte-sec)" }}>Numéro de dépôt AJRN :</div>
-            <div style={{ fontFamily:"monospace", fontSize:20, fontWeight:800, color:"var(--or)", letterSpacing:3 }}>0707070707</div>
-            <button onClick={() => copier("0789514185", "numero")}
+<div style={{ fontFamily:"monospace", fontSize:20, fontWeight:800, color:"var(--or)", letterSpacing:3 }}>0789514185</div>            <button onClick={() => copier("0789514185", "numero")}
               style={{ border:"none", background: copie==="numero" ? "rgba(74,222,128,0.15)" : "var(--or-pale)", color: copie==="numero" ? "#4ade80" : "var(--or)", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:600, display:"flex", alignItems:"center", gap:5, border:`1px solid ${copie==="numero" ? "rgba(74,222,128,0.3)" : "var(--or-bordure)"}` as unknown as undefined }}>
               {copie==="numero" ? <><Check size={12} /> Copié</> : <><Copy size={12} /> Copier</>}
             </button>
