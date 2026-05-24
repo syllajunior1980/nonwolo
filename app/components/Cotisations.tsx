@@ -4,9 +4,10 @@ import { useStore } from "@/lib/store";
 import { CheckCircle, Clock, Copy, Check, TrendingUp } from "lucide-react";
 
 const OPERATEURS = [
-  { nom: "Orange Money", couleur: "#ff8c42", fond: "rgba(255,140,66,0.1)", bordure: "rgba(255,140,66,0.2)", code: "#144*1*1*0707070707*1000#", tip: "Composer ce code → Appuyer sur Appel → Valider → Entrer votre code PIN Orange Money" },
-  { nom: "Moov Money",   couleur: "#4f9cf9", fond: "rgba(79,156,249,0.1)", bordure: "rgba(79,156,249,0.2)", code: "#133*1*0707070707*1000#",   tip: "Composer ce code → Appuyer sur Appel → Valider → Entrer votre code PIN Moov" },
-  { nom: "Wave",         couleur: "#38bdf8", fond: "rgba(56,189,248,0.1)", bordure: "rgba(56,189,248,0.2)", code: "Ouvrir Wave → Envoyer → 0707070707 → 1 000 FCFA", tip: 'Indiquer dans le motif : "Cotisation AJRN + Votre nom complet"' },
+  { nom: "Orange Money", numero: "0789514185", couleur: "#ff8c42", fond: "rgba(255,140,66,0.1)", bordure: "rgba(255,140,66,0.2)", code: "#144*1*1*0789514185*1000#", tip: "Composer ce code sur votre téléphone → Appuyer sur Appel → Valider → Entrer votre code PIN Orange Money" },
+  { nom: "MTN Mobile Money", numero: "0544415662", couleur: "#ffcc00", fond: "rgba(255,204,0,0.1)", bordure: "rgba(255,204,0,0.25)", code: "*133*3*1*0544415662*1000#", tip: "Composer ce code → Appuyer sur Appel → Valider → Entrer votre code PIN MTN" },
+  { nom: "Moov Money",   numero: "À venir", couleur: "#4f9cf9", fond: "rgba(79,156,249,0.1)", bordure: "rgba(79,156,249,0.2)", code: "*155*1*1*NUMERO_MOOV*1000#", tip: "Composer ce code → Appuyer sur Appel → Valider → Entrer votre code PIN Moov" },
+  { nom: "Wave",         numero: "0789514185", couleur: "#38bdf8", fond: "rgba(56,189,248,0.1)", bordure: "rgba(56,189,248,0.2)", code: "*9113*1*0789514185*1000#", tip: 'Composer ce code → Appuyer sur Appel → Valider. Motif : "Cotisation AJRN + Votre nom complet"' },
 ];
 
 export default function Cotisations() {
@@ -106,7 +107,7 @@ export default function Cotisations() {
           <div style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 16px", background:"var(--or-pale)", border:"1px solid var(--or-bordure)", borderRadius:12, flexWrap:"wrap" }}>
             <div style={{ fontSize:13, color:"var(--texte-sec)" }}>Numéro de dépôt AJRN :</div>
             <div style={{ fontFamily:"monospace", fontSize:20, fontWeight:800, color:"var(--or)", letterSpacing:3 }}>0707070707</div>
-            <button onClick={() => copier("0707070707", "numero")}
+            <button onClick={() => copier("0789514185", "numero")}
               style={{ border:"none", background: copie==="numero" ? "rgba(74,222,128,0.15)" : "var(--or-pale)", color: copie==="numero" ? "#4ade80" : "var(--or)", borderRadius:8, padding:"6px 12px", fontSize:12, fontWeight:600, display:"flex", alignItems:"center", gap:5, border:`1px solid ${copie==="numero" ? "rgba(74,222,128,0.3)" : "var(--or-bordure)"}` as unknown as undefined }}>
               {copie==="numero" ? <><Check size={12} /> Copié</> : <><Copy size={12} /> Copier</>}
             </button>

@@ -26,10 +26,11 @@ Merci d'effectuer votre paiement sur le numéro unique du Mouvement :
 
 📱 0707070707
 
-Syntaxes de paiement :
-• Orange Money : #144*1*1*0707070707*1000#
-• Moov Money : #133*1*0707070707*1000#
-• Wave : Ouvrir l'app → Envoyer → 0707070707 → 1 000 FCFA
+Numéros et syntaxes de paiement :
+• Orange Money : #144*1*1*0789514185*1000#
+• MTN Mobile Money : *133*3*1*0544415662*1000#
+• Moov Money : *155*1*1*[numéro Moov]*1000#
+• Wave : *9113*1*0789514185*1000#
 
 Votre soutien est vital pour nos actions communautaires.
 

@@ -2,38 +2,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Palette principale — luxe africain */
-  --noir: #0d0f0e;
-  --noir-2: #141816;
-  --noir-3: #1c201e;
-  --noir-4: #232826;
+  /* Palette — fond clair anthracite chaud, lisible en plein soleil */
+  --noir: #1e2120;
+  --noir-2: #252a28;
+  --noir-3: #2e3330;
+  --noir-4: #363c39;
   --or: #c9a84c;
   --or-clair: #e8c87a;
-  --or-pale: rgba(201,168,76,0.1);
-  --or-bordure: rgba(201,168,76,0.25);
+  --or-pale: rgba(201,168,76,0.12);
+  --or-bordure: rgba(201,168,76,0.3);
   --vert: #2a7a52;
   --vert-vif: #34a06b;
   --vert-pale: rgba(42,122,82,0.12);
-  --blanc: #f5f0e8;
-  --blanc-2: #ede8df;
-  --texte: #f0ebe2;
-  --texte-sec: #8a9190;
-  --texte-ter: #5a6361;
-  --bordure: rgba(255,255,255,0.07);
-  --bordure-or: rgba(201,168,76,0.2);
+  --blanc: #f0ede8;
+  --blanc-2: #e8e4de;
+  --texte: #edeae4;
+  --texte-sec: #a8a49d;
+  --texte-ter: #757068;
+  --bordure: rgba(255,255,255,0.1);
+  --bordure-or: rgba(201,168,76,0.25);
   --rouge: #c0392b;
-  --rouge-pale: rgba(192,57,43,0.12);
+  --rouge-pale: rgba(192,57,43,0.15);
   --bleu: #2563eb;
   --bleu-pale: rgba(37,99,235,0.12);
-  --fond: #111413;
-  --fond-carte: #181c1a;
-  --fond-carte-2: #1e2220;
+  --fond: #2a2e2c;
+  --fond-carte: #323835;
+  --fond-carte-2: #3a3f3c;
   --alerte: #d97706;
-  --alerte-pale: rgba(217,119,6,0.12);
-
-  /* Shadows */
-  --ombre: 0 4px 24px rgba(0,0,0,0.4);
-  --ombre-or: 0 0 0 1px var(--or-bordure), 0 4px 20px rgba(201,168,76,0.08);
+  --alerte-pale: rgba(217,119,6,0.15);
+  --ombre: 0 4px 24px rgba(0,0,0,0.3);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,8 +53,6 @@ body {
 
 input, select, textarea, button { font-family: 'Outfit', system-ui, sans-serif; }
 button { cursor: pointer; }
-
-/* ===== COMPOSANTS ===== */
 
 .carte {
   background: var(--fond-carte);
@@ -86,10 +81,9 @@ button { cursor: pointer; }
   text-transform: uppercase;
 }
 
-/* Boutons */
 .btn-principal {
   background: var(--or);
-  color: var(--noir);
+  color: #1a1a1a;
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
@@ -117,12 +111,12 @@ button { cursor: pointer; }
   gap: 8px;
   transition: background 0.15s;
 }
-.btn-secondaire:hover { background: rgba(201,168,76,0.18); }
+.btn-secondaire:hover { background: rgba(201,168,76,0.2); }
 
 .btn-danger {
   background: var(--rouge-pale);
   color: #e85c4e;
-  border: 1px solid rgba(192,57,43,0.2);
+  border: 1px solid rgba(192,57,43,0.25);
   border-radius: 10px;
   padding: 10px 20px;
   font-size: 13px;
@@ -131,7 +125,7 @@ button { cursor: pointer; }
   align-items: center;
   gap: 8px;
 }
-.btn-danger:hover { background: rgba(192,57,43,0.2); }
+.btn-danger:hover { background: rgba(192,57,43,0.22); }
 
 .btn-neutre {
   background: transparent;
@@ -145,7 +139,6 @@ button { cursor: pointer; }
 }
 .btn-neutre:hover { border-color: var(--texte-ter); color: var(--texte); }
 
-/* Champs de formulaire */
 .champ {
   width: 100%;
   padding: 10px 14px;
@@ -159,7 +152,7 @@ button { cursor: pointer; }
 }
 .champ:focus {
   border-color: var(--or);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
 }
 .champ option { background: var(--noir-3); }
 
@@ -173,10 +166,9 @@ button { cursor: pointer; }
   display: block;
 }
 
-/* Modals */
 .modal-fond {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.6);
   backdrop-filter: blur(6px);
   display: flex; align-items: center; justify-content: center;
   z-index: 200; padding: 1rem;
@@ -189,41 +181,38 @@ button { cursor: pointer; }
   width: 100%; max-width: 580px;
   max-height: 90vh; overflow-y: auto;
   animation: slideUp 0.22s ease;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.4);
 }
 
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes slideUp { from { transform: translateY(24px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
 
-/* Tables */
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th {
   text-align: left; padding: 11px 14px;
-  color: var(--texte-ter); font-weight: 600;
+  color: var(--texte-sec); font-weight: 600;
   font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
   border-bottom: 1px solid var(--bordure);
   background: var(--noir-3);
 }
 td { padding: 13px 14px; border-bottom: 1px solid var(--bordure); vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: rgba(201,168,76,0.04); }
+tbody tr:hover td { background: rgba(201,168,76,0.05); }
 
-/* Toast */
 .toast {
   position: fixed; bottom: 24px; right: 24px;
   padding: 13px 20px; border-radius: 12px;
   font-size: 13px; font-weight: 500;
   display: flex; align-items: center; gap: 9px;
   z-index: 999;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
   animation: slideUp 0.25s ease;
   border: 1px solid var(--or-bordure);
   background: var(--noir-2);
   color: var(--texte);
 }
 
-/* Sidebar */
 .sidebar {
   width: 256px; min-width: 256px;
   background: var(--noir-2);
@@ -243,7 +232,7 @@ tbody tr:hover td { background: rgba(201,168,76,0.04); }
   transition: all 0.15s; cursor: pointer;
   text-decoration: none;
 }
-.nav-item:hover { background: rgba(255,255,255,0.04); color: var(--texte); }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: var(--texte); }
 .nav-item.actif {
   background: var(--or-pale);
   color: var(--or);
@@ -251,18 +240,8 @@ tbody tr:hover td { background: rgba(201,168,76,0.04); }
   border: 1px solid var(--or-bordure);
 }
 
-/* Contenu principal */
 .main-content { margin-left: 256px; min-height: 100vh; padding: 2.5rem; }
 
-/* Séparateur or */
-.sep-or {
-  width: 40px; height: 3px;
-  background: linear-gradient(90deg, var(--or), transparent);
-  border-radius: 99px;
-  margin: 8px 0 16px;
-}
-
-/* Stat card hover */
 .stat-carte {
   background: var(--fond-carte);
   border: 1px solid var(--bordure);
@@ -276,10 +255,9 @@ tbody tr:hover td { background: rgba(201,168,76,0.04); }
   transform: translateY(-2px);
 }
 
-/* Barre de progression */
 .barre-fond {
   height: 6px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.08);
   border-radius: 99px;
   overflow: hidden;
 }
