@@ -8,10 +8,9 @@ const OPERATEURS: Operateur[] = ["Orange Money","Moov Money","Wave",""];
 const CONTINENTS: Continent[] = ["Afrique","Europe","Amérique du Nord","Amérique du Sud","Asie","Océanie"];
 
 const SYNTAXES: Record<string, { code: string; tip: string; couleur: string }> = {
-  "Orange Money":      { code: "#144*1*1*0789514185*1000#",    tip: "Composer → Appel → Valider → PIN Orange",   couleur: "#ff8c42" },
-  "MTN Mobile Money":  { code: "*133*3*1*0544415662*1000#",    tip: "Composer → Appel → Valider → PIN MTN",      couleur: "#ffcc00" },
-  "Moov Money":        { code: "*155*1*1*NUMERO_MOOV*1000#",   tip: "Composer → Appel → Valider → PIN Moov",     couleur: "#4f9cf9" },
-  "Wave":              { code: "*9113*1*0789514185*1000#",     tip: 'Composer → Appel → Motif : "Cotisation AJRN + Nom"', couleur: "#38bdf8" },
+  "Orange Money": { code: "#144*1*1*0707070707*1000#", tip: "Composer → Valider → Entrer PIN Orange", couleur: "#ff6b00" },
+  "Moov Money":   { code: "#133*1*0707070707*1000#",   tip: "Composer → Valider → Entrer PIN Moov",   couleur: "#4f9cf9" },
+  "Wave":         { code: "Ouvrir Wave → Envoyer → 0707070707 → 1000 FCFA", tip: 'Motif : "Cotisation AJRN + Votre nom"', couleur: "#1e90ff" },
 };
 
 const BADGE_SIT: Record<string, { bg: string; color: string }> = {
@@ -270,7 +269,7 @@ export default function Adherents() {
                   <label className="label">Opérateur de paiement</label>
                   <select className="champ" value={form.operateur} onChange={e => setForm(x => ({ ...x, operateur: e.target.value as Operateur }))}>
                     <option value="">Choisir...</option>
-                    {["Orange Money","MTN Mobile Money","Moov Money","Wave"].map(o => <option key={o} value={o}>{o}</option>)}
+                    {["Orange Money","Moov Money","Wave"].map(o => <option key={o} value={o}>{o}</option>)}
                   </select>
                 </div>
 
