@@ -124,9 +124,7 @@ export const useStore = create<Store>((set, get) => ({
   },
 
   addVillage: async (v) => {
-    const newId = "v" + Date.now();
-    const record = { ...v, id: newId };
-    const { data, error } = await supabase.from("villages").insert([record]).select().single();
+    const { data, error } = await supabase.from("villages").insert([v]).select().single();
     if (!error && data) {
       set(s => ({ villages: [...s.villages, data as Village] }));
     }
