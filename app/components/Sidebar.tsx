@@ -41,7 +41,7 @@ export default function Sidebar() {
             POUR LE NONWOLO
           </div>
           <div style={{ color: "rgba(255,255,255,0.50)", fontSize: 10, marginTop: 4, letterSpacing: "0.5px" }}>
-            26 villages · une seule vision
+            58 villages · une seule vision
           </div>
         </div>
       </div>

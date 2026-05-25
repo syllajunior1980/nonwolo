@@ -38,7 +38,7 @@ export default function Villages() {
             <h1 className="titre" style={{ fontSize:30, fontWeight:700, color:"var(--texte)", lineHeight:1 }}>Villages du Nonwolo</h1>
           </div>
           <p style={{ color:"var(--texte-sec)", fontSize:13.5, marginLeft:16 }}>
-            {villages.length} village{villages.length!==1?"s":""} enregistré{villages.length!==1?"s":""} · 26 villages, une seule vision
+            {villages.length} village{villages.length!==1?"s":""} enregistré{villages.length!==1?"s":""} · 58 villages, une seule vision
           </p>
         </div>
         <button className="btn-principal" onClick={() => setModalOuvert(true)}>

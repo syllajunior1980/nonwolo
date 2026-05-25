@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Mouvement 1000 Jeunes pour le Nonwolo — JN1000",
-  description: "Plateforme de gestion du Mouvement 1000 Jeunes pour le Nonwolo — 26 villages, une seule vision",
+  description: "Plateforme de gestion du Mouvement 1000 Jeunes pour le Nonwolo — 58 villages, une seule vision",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
