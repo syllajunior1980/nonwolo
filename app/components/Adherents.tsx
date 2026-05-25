@@ -267,11 +267,75 @@ export default function Adherents() {
                 <textarea className="champ" rows={3} value={form.notes} onChange={e => champ("notes", e.target.value)} placeholder="Notes supplémentaires..." style={{ resize:"vertical" }} />
               </div>
 
-              <div style={{ marginTop:"1rem", display:"flex", alignItems:"center", gap:10, padding:"12px 14px", background:"var(--vert-pale)", border:"1px solid var(--vert-clair)", borderRadius:10 }}>
-                <input type="checkbox" id="paye" checked={form.paye} onChange={e => champ("paye", e.target.checked)} style={{ width:16, height:16, accentColor:"var(--vert)", cursor:"pointer" }} />
-                <label htmlFor="paye" style={{ fontSize:13.5, fontWeight:600, color:"var(--vert)", cursor:"pointer" }}>
-                  Cotisation de 1 000 FCFA payée
-                </label>
+              {/* Section paiement USSD automatique */}
+              <div style={{ marginTop:"1rem", border:"1.5px solid var(--vert-clair)", borderRadius:12, overflow:"hidden" }}>
+
+                {/* Choix opérateur si pas encore sélectionné */}
+                {!form.operateur && (
+                  <div style={{ padding:"12px 14px", background:"var(--or-pale)", borderBottom:"1px solid var(--or-bordure)" }}>
+                    <div style={{ fontSize:12.5, color:"var(--or)", fontWeight:600 }}>
+                      ⚠️ Sélectionnez d'abord votre opérateur Mobile Money ci-dessus pour payer automatiquement
+                    </div>
+                  </div>
+                )}
+
+                {/* Checkbox cotisation */}
+                <div style={{ display:"flex", alignItems:"center", gap:10, padding:"12px 14px", background:"var(--vert-pale)" }}>
+                  <input type="checkbox" id="paye" checked={form.paye} onChange={e => champ("paye", e.target.checked)} style={{ width:16, height:16, accentColor:"var(--vert)", cursor:"pointer" }} />
+                  <label htmlFor="paye" style={{ fontSize:13.5, fontWeight:600, color:"var(--vert)", cursor:"pointer" }}>
+                    Cotisation de 1 000 FCFA payée
+                  </label>
+                </div>
+
+                {/* Bouton paiement automatique USSD */}
+                {form.operateur && (() => {
+                  const USSD: Record<string, { tel: string; label: string; couleur: string }> = {
+                    "Orange Money": { tel:"tel:%23144*1*1*0789514185*1000%23", label:"#144*1*1*0789514185*1000#", couleur:"#e8650a" },
+                    "Moov Money":   { tel:"tel:*155*1*1*NUMERO_MOOV*1000%23",  label:"*155*1*1*NUMERO_MOOV*1000#",  couleur:"#2563eb" },
+                    "Wave":         { tel:"tel:*9113*1*0789514185*1000%23",    label:"*9113*1*0789514185*1000#",    couleur:"#0891b2" },
+                  };
+                  const op = USSD[form.operateur];
+
+                  // MTN spécial
+                  if (form.operateur === "Moov Money" && !op) return null;
+                  const mtn = form.operateur === "Moov Money" ? null : op;
+
+                  const info = form.operateur === "Orange Money" ? USSD["Orange Money"]
+                             : form.operateur === "Wave"         ? USSD["Wave"]
+                             : form.operateur === "Moov Money"   ? USSD["Moov Money"]
+                             : { tel:"tel:*133*3*1*0544415662*1000%23", label:"*133*3*1*0544415662*1000#", couleur:"#d4900a" };
+
+                  return (
+                    <div style={{ padding:"14px 16px", background:"white", borderTop:"1px solid var(--vert-clair)" }}>
+                      <div style={{ fontSize:12.5, color:"var(--texte-sec)", marginBottom:10, fontWeight:500 }}>
+                        📱 Appuyez ci-dessous pour payer automatiquement via <strong style={{ color:info.couleur }}>{form.operateur}</strong> :
+                      </div>
+                      <div style={{ fontFamily:"monospace", fontSize:13, fontWeight:700, color:info.couleur, background:"rgba(0,0,0,0.04)", padding:"8px 12px", borderRadius:8, marginBottom:12, border:"1px solid rgba(0,0,0,0.08)" }}>
+                        {info.label}
+                      </div>
+                      <a
+                        href={info.tel}
+                        onClick={() => champ("paye", true)}
+                        style={{
+                          display:"inline-flex", alignItems:"center", gap:8,
+                          background:info.couleur, color:"white",
+                          padding:"11px 22px", borderRadius:10,
+                          fontSize:14, fontWeight:700,
+                          textDecoration:"none",
+                          boxShadow:"0 3px 10px rgba(0,0,0,0.20)",
+                          letterSpacing:"0.2px",
+                        }}
+                      >
+                        📞 Payer 1 000 F via {form.operateur}
+                      </a>
+                      <div style={{ fontSize:11, color:"var(--texte-ter)", marginTop:8, lineHeight:1.5 }}>
+                        ✅ Fonctionne sur smartphone Android &amp; iPhone<br/>
+                        Le composeur s'ouvre automatiquement avec le code pré-rempli.<br/>
+                        Appuyez simplement sur <strong>Appel</strong> puis entrez votre <strong>PIN</strong>.
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
             <div style={{ padding:"1rem 1.5rem", borderTop:"1px solid var(--bordure)", display:"flex", justifyContent:"flex-end", gap:10 }}>
