@@ -141,8 +141,8 @@ export default function Adherents() {
                     <td>
                       <div style={{ display:"flex", alignItems:"center", gap:10 }}>
                         {a.photo
-                          ? <img src={a.photo} style={{ width:36,height:36,borderRadius:"50%",objectFit:"cover",border:"2px solid var(--vert-clair)",flexShrink:0 }} alt="" />
-                          : <div style={{ width:36,height:36,borderRadius:"50%",background:"var(--vert-pale)",border:"1.5px solid var(--vert-clair)",color:"var(--vert)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,flexShrink:0 }}>
+                          ? <img src={a.photo} style={{ width:52,height:52,borderRadius:"50%",objectFit:"cover",border:"2px solid var(--vert-clair)",flexShrink:0 }} alt="" />
+                          : <div style={{ width:52,height:52,borderRadius:"50%",background:"var(--vert-pale)",border:"1.5px solid var(--vert-clair)",color:"var(--vert)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,fontWeight:700,flexShrink:0 }}>
                               {(a.nom[0]||"")+(a.prenoms[0]||"")}
                             </div>
                         }
@@ -239,7 +239,7 @@ export default function Adherents() {
                 </div>
                 <div>
                   <label className="label">Pays de résidence</label>
-                  <input className="champ" value={form.pays} onChange={e => champ("pays", e.target.value)} placeholder="Ex: Côte d'Ivoire, France..." />
+                  <input className="champ" value={form.pays} onChange={e => champ("pays", e.target.value)} placeholder="Ex: Cote d'Ivoire, France..." />
                 </div>
                 <div>
                   <label className="label">Continent</label>
@@ -267,7 +267,7 @@ export default function Adherents() {
                 <textarea className="champ" rows={3} value={form.notes} onChange={e => champ("notes", e.target.value)} placeholder="Notes supplémentaires..." style={{ resize:"vertical" }} />
               </div>
 
-              {/* Section paiement USSD automatique */}
+              {/* Cotisation - enregistrer d abord, payer apres */}
               <div style={{ marginTop:"1rem", border:"1.5px solid var(--vert-clair)", borderRadius:12, overflow:"hidden" }}>
 
                 {/* Choix opérateur si pas encore sélectionné */}
@@ -295,11 +295,6 @@ export default function Adherents() {
                     "Wave":         { tel:"tel:*9113*1*0789514185*1000%23",    label:"*9113*1*0789514185*1000#",    couleur:"#0891b2" },
                   };
                   const op = USSD[form.operateur];
-
-                  // MTN spécial
-                  if (form.operateur === "Moov Money" && !op) return null;
-                  const mtn = form.operateur === "Moov Money" ? null : op;
-
                   const info = form.operateur === "Orange Money" ? USSD["Orange Money"]
                              : form.operateur === "Wave"         ? USSD["Wave"]
                              : form.operateur === "Moov Money"   ? USSD["Moov Money"]
@@ -329,7 +324,7 @@ export default function Adherents() {
                         📞 Payer 1 000 F via {form.operateur}
                       </a>
                       <div style={{ fontSize:11, color:"var(--texte-ter)", marginTop:8, lineHeight:1.5 }}>
-                        ✅ Fonctionne sur smartphone Android &amp; iPhone<br/>
+                        ✅ Fonctionne sur smartphone Android et iPhone<br/>
                         Le composeur s'ouvre automatiquement avec le code pré-rempli.<br/>
                         Appuyez simplement sur <strong>Appel</strong> puis entrez votre <strong>PIN</strong>.
                       </div>
