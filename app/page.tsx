@@ -29,21 +29,15 @@ export default function Page() {
       minHeight: "100vh", flexDirection: "column", gap: 20,
       background: "var(--fond)",
     }}>
-      {/* Anneau animé */}
       <div style={{
-        width: 52, height: 52,
-        borderRadius: "50%",
-        border: "3px solid rgba(201,168,76,0.15)",
-        borderTopColor: "var(--or)",
+        width: 52, height: 52, borderRadius: "50%",
+        border: "3px solid rgba(30,107,69,0.15)",
+        borderTopColor: "var(--vert)",
         animation: "spin 0.9s linear infinite",
       }} />
       <div style={{ textAlign: "center" }}>
-        <div className="titre" style={{ color: "var(--or)", fontSize: 20, fontWeight: 600, letterSpacing: "0.5px" }}>
-          JN1000
-        </div>
-        <div style={{ color: "var(--texte-ter)", fontSize: 12.5, marginTop: 4 }}>
-          26 villages · une seule vision
-        </div>
+        <div style={{ color: "var(--vert)", fontSize: 20, fontWeight: 700, fontFamily: "serif" }}>JN1000</div>
+        <div style={{ color: "var(--texte-ter)", fontSize: 12.5, marginTop: 4 }}>26 villages · une seule vision</div>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </div>
@@ -55,6 +49,20 @@ export default function Page() {
       <main className="main-content">
         {pages[activeTab] || <TableauDeBord />}
       </main>
+      <style>{`
+        @media (max-width: 768px) {
+          .main-content {
+            padding-top: 0 !important;
+          }
+          /* Fix titre caché par bouton menu mobile */
+          .main-content h1 {
+            padding-left: 52px !important;
+          }
+          .main-content > div > div:first-child {
+            padding-left: 52px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
