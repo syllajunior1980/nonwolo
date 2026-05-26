@@ -37,7 +37,7 @@ export default function Page() {
       }} />
       <div style={{ textAlign: "center" }}>
         <div style={{ color: "var(--vert)", fontSize: 20, fontWeight: 700, fontFamily: "serif" }}>JN1000</div>
-        <div style={{ color: "var(--texte-ter)", fontSize: 12.5, marginTop: 4 }}>26 villages · une seule vision</div>
+        <div style={{ color: "var(--texte-ter)", fontSize: 12.5, marginTop: 4 }}>58 villages · une seule vision</div>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </div>
