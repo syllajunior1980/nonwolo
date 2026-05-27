@@ -361,59 +361,152 @@ export default function Adherents() {
         </div>
       )}
 
-      {/* Modal Détail */}
+      {/* Page Profil Adherent — style app native */}
       {modalDetail && (
-        <div className="modal-fond">
-          <div className="modal" style={{ maxWidth:450 }}>
-            <div style={{ padding:"1.25rem 1.5rem", borderBottom:"1px solid var(--bordure)", display:"flex", justifyContent:"space-between", alignItems:"center", background:"var(--vert-pale)", borderRadius:"20px 20px 0 0" }}>
-              <h2 className="titre" style={{ fontSize:18, fontWeight:700, color:"var(--vert)" }}>Fiche adhérent</h2>
-              <button onClick={() => setModalDetail(null)} style={{ border:"none", background:"transparent", color:"var(--texte-sec)", borderRadius:8, padding:"6px", cursor:"pointer" }}><X size={18}/></button>
+        <div style={{ position:"fixed", inset:0, background:"var(--fond)", zIndex:200, overflowY:"auto", animation:"slideUp 0.2s ease" }}>
+          {/* Header vert avec photo */}
+          <div style={{ background:"var(--vert)", paddingBottom:"2rem", position:"relative" }}>
+            {/* Barre navigation */}
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"1rem 1.25rem" }}>
+              <button onClick={() => setModalDetail(null)} style={{ border:"none", background:"rgba(255,255,255,0.15)", color:"white", borderRadius:10, padding:"8px 12px", cursor:"pointer", display:"flex", alignItems:"center", gap:6, fontWeight:600, fontSize:13 }}>
+                ← Retour
+              </button>
+              <div style={{ color:"white", fontWeight:700, fontSize:16, letterSpacing:"0.5px" }}>PROFIL</div>
+              <button onClick={() => { ouvrir(modalDetail); setModalDetail(null); }} style={{ border:"none", background:"rgba(255,255,255,0.15)", color:"white", borderRadius:10, padding:"8px 12px", cursor:"pointer", display:"flex", alignItems:"center", gap:6, fontWeight:600, fontSize:13 }}>
+                <Edit3 size={14}/> Modifier
+              </button>
             </div>
-            <div style={{ padding:"1.5rem" }}>
-              <div style={{ textAlign:"center", marginBottom:"1.5rem" }}>
+
+            {/* Photo + Nom */}
+            <div style={{ textAlign:"center", paddingTop:"0.5rem" }}>
+              <div style={{ position:"relative", display:"inline-block" }}>
                 {modalDetail.photo
-                  ? <img src={modalDetail.photo} style={{ width:80, height:80, borderRadius:"50%", objectFit:"cover", border:"3px solid var(--vert-clair)", margin:"0 auto" }} alt="" />
-                  : <div style={{ width:80, height:80, borderRadius:"50%", background:"var(--vert-pale)", border:"2px solid var(--vert-clair)", color:"var(--vert)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, fontWeight:700, margin:"0 auto" }}>
+                  ? <img src={modalDetail.photo} style={{ width:100, height:100, borderRadius:"50%", objectFit:"cover", border:"3px solid white", boxShadow:"0 4px 15px rgba(0,0,0,0.25)" }} alt="" />
+                  : <div style={{ width:100, height:100, borderRadius:"50%", background:"rgba(255,255,255,0.2)", border:"3px solid white", color:"white", display:"flex", alignItems:"center", justifyContent:"center", fontSize:32, fontWeight:700, margin:"0 auto" }}>
                       {(modalDetail.nom[0]||"")+(modalDetail.prenoms[0]||"")}
                     </div>
                 }
-                <div style={{ marginTop:10 }}>
-                  <div style={{ fontWeight:700, fontSize:18, color:"var(--texte)" }}>{modalDetail.nom} {modalDetail.prenoms}</div>
-                  <div style={{ fontFamily:"monospace", fontSize:12, color:"var(--or)", fontWeight:700, marginTop:3 }}>{modalDetail.id}</div>
-                </div>
               </div>
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
-                {[
-                  ["Village", modalDetail.village],
-                  ["Quartier", modalDetail.quartier || "—"],
-                  ["Pays", modalDetail.pays || "—"],
-                  ["Continent", modalDetail.continent],
-                  ["Contact", modalDetail.contact],
-                  ["Email", modalDetail.email || "—"],
-                  ["Situation", modalDetail.situation],
-                  ["Opérateur", modalDetail.operateur || "—"],
-                  ["Date naissance", modalDetail.ddn || "—"],
-                  ["Lieu naissance", modalDetail.lieu_naissance || "—"],
-                  ["Date inscription", modalDetail.date_inscription],
-                  ["Cotisation", modalDetail.paye ? "✓ Payée" : "En attente"],
-                ].map(([k,v]) => (
-                  <div key={k} style={{ padding:"8px 10px", background:"var(--fond)", borderRadius:8 }}>
-                    <div style={{ fontSize:10.5, fontWeight:700, color:"var(--texte-ter)", textTransform:"uppercase", letterSpacing:"0.4px", marginBottom:3 }}>{k}</div>
-                    <div style={{ fontSize:13, fontWeight:500, color:"var(--texte)" }}>{v}</div>
+              <div style={{ marginTop:12 }}>
+                <div style={{ fontWeight:800, fontSize:20, color:"white", letterSpacing:"0.5px" }}>
+                  {modalDetail.nom.toUpperCase()} {modalDetail.prenoms.toUpperCase()}
+                </div>
+                <div style={{ fontFamily:"monospace", fontSize:13, color:"rgba(255,255,255,0.80)", marginTop:4, fontWeight:600 }}>
+                  {modalDetail.id}
+                </div>
+                {modalDetail.email && (
+                  <div style={{ fontSize:12.5, color:"rgba(255,255,255,0.70)", marginTop:3 }}>
+                    ✉ {modalDetail.email}
                   </div>
-                ))}
+                )}
               </div>
-              {modalDetail.notes && (
-                <div style={{ marginTop:10, padding:"10px 12px", background:"var(--or-pale)", border:"1px solid var(--or-bordure)", borderRadius:10 }}>
-                  <div style={{ fontSize:10.5, fontWeight:700, color:"var(--or)", textTransform:"uppercase", marginBottom:4 }}>Notes</div>
-                  <div style={{ fontSize:13, color:"var(--texte)" }}>{modalDetail.notes}</div>
+            </div>
+          </div>
+
+          {/* Contenu */}
+          <div style={{ padding:"1.25rem" }}>
+
+            {/* Badge cotisation */}
+            <div style={{ display:"flex", justifyContent:"center", marginTop:"-1rem", marginBottom:"1.25rem" }}>
+              <span style={{ background: modalDetail.paye ? "var(--vert)" : "var(--alerte)", color:"white", padding:"6px 20px", borderRadius:99, fontSize:13, fontWeight:700, boxShadow:"0 2px 8px rgba(0,0,0,0.15)" }}>
+                {modalDetail.paye ? "✓ Cotisation payée" : "⏳ Cotisation en attente"}
+              </span>
+            </div>
+
+            {/* Infos personnelles */}
+            <div style={{ background:"var(--vert)", borderRadius:12, padding:"10px 14px", marginBottom:"1rem", display:"flex", alignItems:"center", gap:8 }}>
+              <span style={{ color:"white", fontWeight:700, fontSize:13, textTransform:"uppercase", letterSpacing:"0.5px" }}>
+                👤 Informations personnelles
+              </span>
+            </div>
+
+            {[
+              { icon:"👤", label:"NOM",              val: modalDetail.nom },
+              { icon:"👤", label:"PRÉNOMS",           val: modalDetail.prenoms },
+              { icon:"📞", label:"N° DE TÉLÉPHONE",   val: modalDetail.contact, tel: true },
+              { icon:"✉",  label:"MAIL",              val: modalDetail.email || "—" },
+              { icon:"🎂", label:"DATE DE NAISSANCE", val: modalDetail.ddn || "—" },
+              { icon:"📍", label:"LIEU DE NAISSANCE", val: modalDetail.lieu_naissance || "—" },
+            ].map((item, i) => (
+              <div key={i} style={{ display:"flex", alignItems:"center", gap:14, background:"white", borderRadius:12, padding:"13px 16px", marginBottom:8, boxShadow:"0 1px 4px rgba(22,79,51,0.06)" }}>
+                <div style={{ width:40, height:40, borderRadius:10, background:"var(--vert-pale)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, flexShrink:0 }}>
+                  {item.icon}
                 </div>
-              )}
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:10.5, fontWeight:700, color:"var(--texte-ter)", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:2 }}>{item.label}</div>
+                  <div style={{ fontSize:14, fontWeight:600, color:"var(--texte)" }}>{item.val}</div>
+                </div>
+                {item.tel && item.val !== "—" && (
+                  <a href={"tel:"+item.val.replace(/\s/g,"")} style={{ width:42, height:42, borderRadius:10, background:"var(--vert)", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, textDecoration:"none" }}>
+                    <span style={{ fontSize:18 }}>📞</span>
+                  </a>
+                )}
+              </div>
+            ))}
+
+            {/* Localisation */}
+            <div style={{ background:"var(--vert)", borderRadius:12, padding:"10px 14px", marginBottom:"1rem", marginTop:"1rem", display:"flex", alignItems:"center", gap:8 }}>
+              <span style={{ color:"white", fontWeight:700, fontSize:13, textTransform:"uppercase", letterSpacing:"0.5px" }}>
+                🌍 Localisation
+              </span>
             </div>
-            <div style={{ padding:"1rem 1.5rem", borderTop:"1px solid var(--bordure)", display:"flex", justifyContent:"flex-end", gap:10 }}>
-              <button className="btn-neutre" onClick={() => setModalDetail(null)}>Fermer</button>
-              <button className="btn-principal" onClick={() => { ouvrir(modalDetail); setModalDetail(null); }}><Edit3 size={14}/> Modifier</button>
+
+            {[
+              { icon:"🏘", label:"VILLAGE",         val: modalDetail.village },
+              { icon:"🏠", label:"QUARTIER",        val: modalDetail.quartier || "—" },
+              { icon:"🌍", label:"PAYS DE RÉSIDENCE", val: modalDetail.pays || "—" },
+              { icon:"🌐", label:"CONTINENT",       val: modalDetail.continent },
+            ].map((item, i) => (
+              <div key={i} style={{ display:"flex", alignItems:"center", gap:14, background:"white", borderRadius:12, padding:"13px 16px", marginBottom:8, boxShadow:"0 1px 4px rgba(22,79,51,0.06)" }}>
+                <div style={{ width:40, height:40, borderRadius:10, background:"var(--vert-pale)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, flexShrink:0 }}>
+                  {item.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize:10.5, fontWeight:700, color:"var(--texte-ter)", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:2 }}>{item.label}</div>
+                  <div style={{ fontSize:14, fontWeight:600, color:"var(--texte)" }}>{item.val}</div>
+                </div>
+              </div>
+            ))}
+
+            {/* Adhesion */}
+            <div style={{ background:"var(--vert)", borderRadius:12, padding:"10px 14px", marginBottom:"1rem", marginTop:"1rem" }}>
+              <span style={{ color:"white", fontWeight:700, fontSize:13, textTransform:"uppercase", letterSpacing:"0.5px" }}>
+                📋 Adhésion
+              </span>
             </div>
+
+            {[
+              { icon:"💼", label:"SITUATION PROFESSIONNELLE", val: modalDetail.situation },
+              { icon:"📱", label:"OPÉRATEUR MOBILE MONEY",   val: modalDetail.operateur || "—" },
+              { icon:"📅", label:"DATE D'INSCRIPTION",       val: modalDetail.date_inscription },
+              { icon:"💳", label:"DATE DE PAIEMENT",         val: modalDetail.date_paiement || "—" },
+            ].map((item, i) => (
+              <div key={i} style={{ display:"flex", alignItems:"center", gap:14, background:"white", borderRadius:12, padding:"13px 16px", marginBottom:8, boxShadow:"0 1px 4px rgba(22,79,51,0.06)" }}>
+                <div style={{ width:40, height:40, borderRadius:10, background:"var(--vert-pale)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, flexShrink:0 }}>
+                  {item.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize:10.5, fontWeight:700, color:"var(--texte-ter)", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:2 }}>{item.label}</div>
+                  <div style={{ fontSize:14, fontWeight:600, color:"var(--texte)" }}>{item.val}</div>
+                </div>
+              </div>
+            ))}
+
+            {modalDetail.notes && (
+              <div style={{ background:"var(--or-pale)", border:"1.5px solid var(--or-bordure)", borderRadius:12, padding:"14px 16px", marginTop:8 }}>
+                <div style={{ fontSize:11, fontWeight:700, color:"var(--or)", textTransform:"uppercase", letterSpacing:"0.5px", marginBottom:6 }}>📝 Notes</div>
+                <div style={{ fontSize:13.5, color:"var(--texte)", lineHeight:1.6 }}>{modalDetail.notes}</div>
+              </div>
+            )}
+
+            {/* Bouton supprimer */}
+            <button
+              onClick={() => { supprimer(modalDetail.id); setModalDetail(null); }}
+              className="btn-danger"
+              style={{ width:"100%", justifyContent:"center", marginTop:"1.5rem", marginBottom:"1rem" }}
+            >
+              <Trash2 size={15}/> Supprimer cet adhérent
+            </button>
           </div>
         </div>
       )}
