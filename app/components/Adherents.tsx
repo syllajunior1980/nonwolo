@@ -150,7 +150,7 @@ export default function Adherents() {
               ) : filtres.map(a => {
                 const bs = BADGE_SIT[a.situation] || BADGE_SIT["Autre"];
                 return (
-                  <tr key={a.id}>
+                  <tr key={a.id} onClick={() => setModalDetail(a)} style={{ cursor:"pointer" }}>
                     <td>
                       <span style={{ fontFamily:"monospace", fontSize:12, fontWeight:700, color:"var(--or)", background:"var(--or-pale)", padding:"3px 8px", borderRadius:6 }}>
                         {a.id}
@@ -181,9 +181,9 @@ export default function Adherents() {
                     </td>
                     <td>
                       <div style={{ display:"flex", gap:5 }}>
-                        <button onClick={() => setModalDetail(a)} title="Voir" style={{ border:"none", background:"var(--fond)", color:"var(--texte-sec)", borderRadius:8, padding:"6px 8px", cursor:"pointer" }}><Eye size={14}/></button>
-                        <button onClick={() => ouvrir(a)} title="Modifier" style={{ border:"none", background:"var(--vert-pale)", color:"var(--vert)", borderRadius:8, padding:"6px 8px", cursor:"pointer" }}><Edit3 size={14}/></button>
-                        <button onClick={() => supprimer(a.id)} title="Supprimer" style={{ border:"none", background:"var(--rouge-pale)", color:"var(--rouge)", borderRadius:8, padding:"6px 8px", cursor:"pointer" }}><Trash2 size={14}/></button>
+                        <button onClick={e => { e.stopPropagation(); setModalDetail(a); }} title="Voir" style={{ border:"none", background:"var(--fond)", color:"var(--texte-sec)", borderRadius:8, padding:"6px 8px", cursor:"pointer" }}><Eye size={14}/></button>
+                        <button onClick={e => { e.stopPropagation(); ouvrir(a); }} title="Modifier" style={{ border:"none", background:"var(--vert-pale)", color:"var(--vert)", borderRadius:8, padding:"6px 8px", cursor:"pointer" }}><Edit3 size={14}/></button>
+                        <button onClick={e => { e.stopPropagation(); supprimer(a.id); }} title="Supprimer" style={{ border:"none", background:"var(--rouge-pale)", color:"var(--rouge)", borderRadius:8, padding:"6px 8px", cursor:"pointer" }}><Trash2 size={14}/></button>
                       </div>
                     </td>
                   </tr>
