@@ -33,6 +33,7 @@ export default function Adherents() {
   const [form,            setForm]            = useState(VIDE);
   const [editId,          setEditId]          = useState<string|null>(null);
   const [toast,           setToast]           = useState<{msg:string;type:"ok"|"err"}|null>(null);
+  const [modalPaiement,   setModalPaiement]   = useState<{id:string; nom:string; operateur:string}|null>(null);
 
   const afficherToast = (msg: string, type:"ok"|"err"="ok") => { setToast({msg,type}); setTimeout(() => setToast(null), 3000); };
 
@@ -50,13 +51,30 @@ export default function Adherents() {
     setModalOuvert(true);
   };
 
-  const sauvegarder = () => {
+  const sauvegarder = async () => {
     if (!form.nom.trim() || !form.prenoms.trim() || !form.village || !form.contact.trim()) {
       afficherToast("Veuillez remplir les champs obligatoires (*)", "err"); return;
     }
-    if (editId) { updateAdherent(editId, form); afficherToast("Adhérent mis à jour !"); }
-    else        { addAdherent(form); afficherToast("Adhérent enregistré avec succès !"); }
-    setModalOuvert(false);
+    if (editId) {
+      updateAdherent(editId, form);
+      afficherToast("Adherent mis a jour !");
+      setModalOuvert(false);
+    } else {
+      await addAdherent(form);
+      setModalOuvert(false);
+      // Apres enregistrement, proposer le paiement si pas encore paye
+      if (!form.paye) {
+        const { adherents: updatedList } = useStore.getState();
+        const nouvel = updatedList[0]; // le plus recent
+        setModalPaiement({
+          id: nouvel?.id || "AJRN-????",
+          nom: form.nom + " " + form.prenoms,
+          operateur: form.operateur,
+        });
+      } else {
+        afficherToast("Adherent enregistre avec succes !");
+      }
+    }
   };
 
   const supprimer = (id: string) => {
@@ -404,6 +422,93 @@ export default function Adherents() {
         <div className="toast" style={{ background: toast.type==="err" ? "var(--rouge-pale)" : "var(--blanc)", borderColor: toast.type==="err" ? "rgba(192,57,43,0.3)" : "var(--vert-clair)" }}>
           <span style={{ color: toast.type==="err" ? "var(--rouge)" : "var(--vert)" }}>{toast.type==="err" ? "!" : "✓"}</span>
           {toast.msg}
+        </div>
+      )}
+
+      {/* Modal paiement apres enregistrement */}
+      {modalPaiement && (
+        <div className="modal-fond">
+          <div className="modal" style={{ maxWidth: 420 }}>
+            <div style={{ padding: "1.5rem", textAlign: "center" }}>
+              {/* Succes */}
+              <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--vert-pale)", border: "2px solid var(--vert-clair)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1rem", fontSize: 28 }}>
+                ✅
+              </div>
+              <h2 className="titre" style={{ fontSize: 20, fontWeight: 700, color: "var(--vert)", marginBottom: 6 }}>
+                Enregistrement reussi !
+              </h2>
+              <div style={{ fontFamily: "monospace", fontSize: 14, fontWeight: 700, color: "var(--or)", marginBottom: 4 }}>
+                {modalPaiement.id}
+              </div>
+              <div style={{ fontSize: 13.5, color: "var(--texte-sec)", marginBottom: "1.5rem" }}>
+                {modalPaiement.nom} est bien enregistre(e).
+              </div>
+
+              {/* Proposition paiement */}
+              <div style={{ background: "var(--or-pale)", border: "1.5px solid var(--or-bordure)", borderRadius: 14, padding: "1.25rem", marginBottom: "1.25rem", textAlign: "left" }}>
+                <div style={{ fontWeight: 700, fontSize: 14, color: "var(--or)", marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
+                  💳 Voulez-vous payer la cotisation de 1 000 FCFA maintenant ?
+                </div>
+
+                {modalPaiement.operateur && (() => {
+                  const USSD: Record<string, { tel: string; label: string; couleur: string; numero: string }> = {
+                    "Orange Money": { tel: "tel:%23144*1*1*0789514185*1000%23", label: "#144*1*1*0789514185*1000#", couleur: "#e8650a", numero: "0789514185" },
+                    "MTN Money":    { tel: "tel:*133*3*1*0544415662*1000%23",   label: "*133*3*1*0544415662*1000#",  couleur: "#d4900a", numero: "0544415662" },
+                    "Moov Money":   { tel: "tel:*155*1*1*NUMERO_MOOV*1000%23", label: "*155*1*1*NUMERO_MOOV*1000#", couleur: "#2563eb", numero: "a venir" },
+                    "Wave":         { tel: "tel:*9113*1*0789514185*1000%23",   label: "*9113*1*0789514185*1000#",   couleur: "#0891b2", numero: "0789514185" },
+                  };
+                  const info = USSD[modalPaiement.operateur];
+                  if (!info) return null;
+                  return (
+                    <div>
+                      <div style={{ fontSize: 12, color: "var(--texte-sec)", marginBottom: 8 }}>
+                        Via <strong style={{ color: info.couleur }}>{modalPaiement.operateur}</strong> — N° {info.numero}
+                      </div>
+                      <div style={{ fontFamily: "monospace", fontSize: 13, fontWeight: 700, color: info.couleur, background: "rgba(0,0,0,0.04)", padding: "8px 12px", borderRadius: 8, marginBottom: 10, wordBreak: "break-all" }}>
+                        {info.label}
+                      </div>
+                      <a
+                        href={info.tel}
+                        onClick={() => {
+                          // Marquer comme paye apres le clic
+                          const { adherents: list, updateAdherent: upd } = useStore.getState();
+                          const found = list.find(a => a.id === modalPaiement.id);
+                          if (found) upd(found.id, { paye: true, date_paiement: new Date().toISOString().split("T")[0] });
+                          setTimeout(() => {
+                            setModalPaiement(null);
+                            afficherToast("Paiement lance ! Cotisation confirmee.");
+                          }, 1500);
+                        }}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: info.couleur, color: "white", padding: "12px 20px", borderRadius: 10, fontSize: 14, fontWeight: 700, textDecoration: "none", boxShadow: "0 3px 10px rgba(0,0,0,0.20)", marginBottom: 8 }}
+                      >
+                        📞 Payer 1 000 F via {modalPaiement.operateur}
+                      </a>
+                      <div style={{ fontSize: 11, color: "var(--texte-ter)", textAlign: "center" }}>
+                        Le composeur s&apos;ouvre automatiquement · Appuyez sur Appel puis entrez votre PIN
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                {!modalPaiement.operateur && (
+                  <div style={{ fontSize: 13, color: "var(--texte-ter)" }}>
+                    Aucun operateur mobile money selectionne. Vous pouvez payer plus tard depuis la section Cotisations.
+                  </div>
+                )}
+              </div>
+
+              {/* Boutons */}
+              <div style={{ display: "flex", gap: 10 }}>
+                <button
+                  className="btn-neutre"
+                  style={{ flex: 1 }}
+                  onClick={() => { setModalPaiement(null); afficherToast("Adherent enregistre. Paiement a faire plus tard."); }}
+                >
+                  Payer plus tard
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
