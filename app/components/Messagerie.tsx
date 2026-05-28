@@ -356,7 +356,7 @@ export default function Messagerie() {
                   if (msgDetail.type === "individuel" && dest.length === 1) {
                     const a = adherents.find(x => x.id === dest[0]);
                     if (!a) return null;
-                    const num = a.contact.replace(/[\s\-\+]/g, "").replace(/^00/, "").replace(/^0/, "225");
+                    const num = a.contact.replace(/[\s\-\+]/g, "").replace(/^\+/, "").replace(/^00/, "");
                     return (
                       <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
                         <a href={"https://wa.me/" + num + "?text=" + encodeURIComponent(texte)}
@@ -385,7 +385,7 @@ export default function Messagerie() {
                               setTimeout(() => {
                                 const a = adherents.find(x => x.id === id);
                                 if (a?.contact) {
-                                  const n = a.contact.replace(/[\s\-\+]/g,"").replace(/^00/,"").replace(/^0/,"225");
+                                  const n = a.contact.replace(/[\s\-\+]/g,"").replace(/^\+/,"").replace(/^00/,"");
                                   window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(texte), "_blank");
                                 }
                               }, i * 1500);
