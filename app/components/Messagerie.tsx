@@ -179,9 +179,97 @@ export default function Messagerie() {
               <textarea className="champ" rows={8} value={contenu} onChange={e => setContenu(e.target.value)} placeholder="Rédigez votre message ici..." style={{ resize:"vertical" }} />
             </div>
 
-            <button className="btn-principal" onClick={envoyer} style={{ alignSelf:"flex-start" }}>
-              <Send size={15} /> Envoyer le message
-            </button>
+            {/* Boutons envoi direct WhatsApp + SMS */}
+            <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginTop:"0.5rem" }}>
+              {(() => {
+                const dest = form.type === "groupe"
+                  ? (form.destinataires.length > 0 ? form.destinataires : adherents.map(a => a.id))
+                  : form.destinataires;
+
+                const texte = form.objet + "\n\n" + form.contenu + "\n\n— " + form.expediteur + " (JN1000)";
+
+                if (!form.objet.trim() || !form.contenu.trim()) {
+                  return (
+                    <div style={{ fontSize:12.5, color:"var(--texte-ter)", padding:"8px 12px", background:"var(--fond)", borderRadius:8 }}>
+                      Remplissez l'objet et le message pour envoyer
+                    </div>
+                  );
+                }
+
+                if (form.type === "individuel") {
+                  if (dest.length === 0) {
+                    return <div style={{ fontSize:12.5, color:"var(--alerte)" }}>Sélectionnez un destinataire</div>;
+                  }
+                  const a = adherents.find(x => x.id === dest[0]);
+                  if (!a) return null;
+                  const raw = a.contact.replace(/[\s\-\+]/g,"").replace(/^\+/,"").replace(/^00/,"");
+                  const num = raw.startsWith("225") ? raw : "225" + raw;
+                  return (
+                    <>
+                      <a
+                        href={"https://wa.me/" + num + "?text=" + encodeURIComponent(texte)}
+                        target="_blank" rel="noreferrer"
+                        onClick={() => { addMessage({ ...form, destinataires: dest }); afficherToast("WhatsApp ouvert !"); }}
+                        style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#25D366", color:"white", padding:"11px 20px", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none", boxShadow:"0 2px 8px rgba(37,211,102,0.30)" }}
+                      >
+                        💬 WhatsApp — {a.nom} {a.prenoms}
+                      </a>
+                      <a
+                        href={"sms:" + a.contact.replace(/\s/g,"") + "?body=" + encodeURIComponent(texte)}
+                        onClick={() => { addMessage({ ...form, destinataires: dest }); afficherToast("SMS ouvert !"); }}
+                        style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#4285f4", color:"white", padding:"11px 20px", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none" }}
+                      >
+                        📱 SMS
+                      </a>
+                    </>
+                  );
+                }
+
+                // Groupe
+                return (
+                  <>
+                    <button
+                      onClick={() => {
+                        if (!form.objet.trim() || !form.contenu.trim()) { afficherToast("Remplissez l'objet et le message"); return; }
+                        addMessage({ ...form, destinataires: dest });
+                        if (confirm("Envoyer via WhatsApp à " + dest.length + " membres ?")) {
+                          dest.forEach((id, i) => {
+                            setTimeout(() => {
+                              const a = adherents.find(x => x.id === id);
+                              if (a?.contact) {
+                                const raw = a.contact.replace(/[\s\-\+]/g,"").replace(/^\+/,"").replace(/^00/,"");
+                                const n = raw.startsWith("225") ? raw : "225" + raw;
+                                window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(texte), "_blank");
+                              }
+                            }, i * 1500);
+                          });
+                        }
+                      }}
+                      style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#25D366", color:"white", padding:"11px 20px", borderRadius:10, fontSize:14, fontWeight:700, border:"none", cursor:"pointer", boxShadow:"0 2px 8px rgba(37,211,102,0.30)" }}
+                    >
+                      💬 WhatsApp ({dest.length} membres)
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!form.objet.trim() || !form.contenu.trim()) { afficherToast("Remplissez l'objet et le message"); return; }
+                        addMessage({ ...form, destinataires: dest });
+                        dest.forEach((id, i) => {
+                          setTimeout(() => {
+                            const a = adherents.find(x => x.id === id);
+                            if (a?.contact) {
+                              window.open("sms:" + a.contact.replace(/\s/g,"") + "?body=" + encodeURIComponent(texte), "_blank");
+                            }
+                          }, i * 1500);
+                        });
+                      }}
+                      style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#4285f4", color:"white", padding:"11px 20px", borderRadius:10, fontSize:14, fontWeight:700, border:"none", cursor:"pointer" }}
+                    >
+                      📱 SMS ({dest.length} membres)
+                    </button>
+                  </>
+                );
+              })()}
+            </div>
           </div>
 
           {/* Panneau droite */}
@@ -340,80 +428,6 @@ export default function Messagerie() {
               <div>
                 <div style={{ fontSize:11.5, fontWeight:700, color:"var(--texte-sec)", textTransform:"uppercase", marginBottom:8 }}>Contenu</div>
                 <div style={{ background:"var(--fond)", borderRadius:10, padding:"12px 14px", fontSize:13.5, lineHeight:1.7, whiteSpace:"pre-wrap" }}>{msgDetail.contenu}</div>
-              </div>
-
-              {/* Boutons envoi direct */}
-              <div style={{ marginTop:"1.25rem", padding:"1rem", background:"var(--vert-pale)", borderRadius:12, border:"1px solid var(--vert-clair)" }}>
-                <div style={{ fontSize:12, fontWeight:700, color:"var(--vert)", textTransform:"uppercase", letterSpacing:"0.4px", marginBottom:10 }}>
-                  📤 Envoyer directement
-                </div>
-                {(() => {
-                  const dest = msgDetail.destinataires.length > 0
-                    ? msgDetail.destinataires
-                    : adherents.map(a => a.id);
-                  const texte = msgDetail.objet + "\n\n" + msgDetail.contenu + "\n\n— " + msgDetail.expediteur + " (JN1000)";
-
-                  if (msgDetail.type === "individuel" && dest.length === 1) {
-                    const a = adherents.find(x => x.id === dest[0]);
-                    if (!a) return null;
-                    const num = a.contact.replace(/[\s\-\+]/g, "").replace(/^\+/, "").replace(/^00/, "");
-                    return (
-                      <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
-                        <a href={"https://wa.me/" + num + "?text=" + encodeURIComponent(texte)}
-                          target="_blank" rel="noreferrer"
-                          style={{ display:"inline-flex", alignItems:"center", gap:7, background:"#25D366", color:"white", padding:"10px 18px", borderRadius:10, fontSize:13.5, fontWeight:700, textDecoration:"none", boxShadow:"0 2px 8px rgba(37,211,102,0.30)" }}>
-                          💬 WhatsApp — {a.nom} {a.prenoms}
-                        </a>
-                        <a href={"sms:" + a.contact.replace(/\s/g,"") + "?body=" + encodeURIComponent(texte)}
-                          style={{ display:"inline-flex", alignItems:"center", gap:7, background:"#4285f4", color:"white", padding:"10px 18px", borderRadius:10, fontSize:13.5, fontWeight:700, textDecoration:"none" }}>
-                          📱 SMS
-                        </a>
-                      </div>
-                    );
-                  }
-
-                  // Groupe
-                  return (
-                    <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-                      <div style={{ fontSize:12.5, color:"var(--texte-sec)" }}>
-                        {dest.length} membre{dest.length > 1 ? "s" : ""} · Les contacts s&apos;ouvrent un par un
-                      </div>
-                      <button
-                        onClick={() => {
-                          if (confirm("Envoyer via WhatsApp à " + dest.length + " membres ?")) {
-                            dest.forEach((id, i) => {
-                              setTimeout(() => {
-                                const a = adherents.find(x => x.id === id);
-                                if (a?.contact) {
-                                  const n = a.contact.replace(/[\s\-\+]/g,"").replace(/^\+/,"").replace(/^00/,"");
-                                  window.open("https://wa.me/" + n + "?text=" + encodeURIComponent(texte), "_blank");
-                                }
-                              }, i * 1500);
-                            });
-                          }
-                        }}
-                        style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#25D366", color:"white", padding:"10px 18px", borderRadius:10, fontSize:13.5, fontWeight:700, border:"none", cursor:"pointer", boxShadow:"0 2px 8px rgba(37,211,102,0.30)" }}
-                      >
-                        💬 Envoyer à tous via WhatsApp ({dest.length})
-                      </button>
-                      <button
-                        onClick={() => {
-                          dest.forEach((id, i) => {
-                            setTimeout(() => {
-                              const a = adherents.find(x => x.id === id);
-                              if (a?.contact) {
-                                window.open("sms:" + a.contact.replace(/\s/g,"") + "?body=" + encodeURIComponent(texte), "_blank");
-                              }
-                            }, i * 1500);
-                          });
-                        }}
-                        style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#4285f4", color:"white", padding:"10px 18px", borderRadius:10, fontSize:13.5, fontWeight:700, border:"none", cursor:"pointer" }}
-                      >
-                        📱 Envoyer à tous via SMS ({dest.length})
-                      </button>
-                    </div>
-                  );
-                })()}
               </div>
             </div>
           </div>
