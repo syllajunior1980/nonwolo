@@ -182,13 +182,13 @@ export default function Messagerie() {
             {/* Boutons envoi direct WhatsApp + SMS */}
             <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginTop:"0.5rem" }}>
               {(() => {
-                const dest = form.type === "groupe"
-                  ? (form.destinataires.length > 0 ? form.destinataires : adherents.map(a => a.id))
-                  : form.destinataires;
+                const dest = type === "groupe"
+                  ? (destinataires.length > 0 ? destinataires : adherents.map(a => a.id))
+                  : destinataires;
 
-                const texte = form.objet + "\n\n" + form.contenu + "\n\n— " + form.expediteur + " (JN1000)";
+                const texte = objet + "\n\n" + contenu + "\n\n— " + expediteur + " (JN1000)";
 
-                if (!form.objet.trim() || !form.contenu.trim()) {
+                if (!objet.trim() || !contenu.trim()) {
                   return (
                     <div style={{ fontSize:12.5, color:"var(--texte-ter)", padding:"8px 12px", background:"var(--fond)", borderRadius:8 }}>
                       Remplissez l'objet et le message pour envoyer
@@ -196,7 +196,7 @@ export default function Messagerie() {
                   );
                 }
 
-                if (form.type === "individuel") {
+                if (type === "individuel") {
                   if (dest.length === 0) {
                     return <div style={{ fontSize:12.5, color:"var(--alerte)" }}>Sélectionnez un destinataire</div>;
                   }
@@ -209,14 +209,14 @@ export default function Messagerie() {
                       <a
                         href={"https://wa.me/" + num + "?text=" + encodeURIComponent(texte)}
                         target="_blank" rel="noreferrer"
-                        onClick={() => { addMessage({ ...form, destinataires: dest }); afficherToast("WhatsApp ouvert !"); }}
+                        onClick={() => { addMessage({ type, objet, contenu, expediteur, destinataires: dest }); afficherToast("WhatsApp ouvert !"); }}
                         style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#25D366", color:"white", padding:"11px 20px", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none", boxShadow:"0 2px 8px rgba(37,211,102,0.30)" }}
                       >
                         💬 WhatsApp — {a.nom} {a.prenoms}
                       </a>
                       <a
                         href={"sms:" + a.contact.replace(/\s/g,"") + "?body=" + encodeURIComponent(texte)}
-                        onClick={() => { addMessage({ ...form, destinataires: dest }); afficherToast("SMS ouvert !"); }}
+                        onClick={() => { addMessage({ type, objet, contenu, expediteur, destinataires: dest }); afficherToast("SMS ouvert !"); }}
                         style={{ display:"inline-flex", alignItems:"center", gap:8, background:"#4285f4", color:"white", padding:"11px 20px", borderRadius:10, fontSize:14, fontWeight:700, textDecoration:"none" }}
                       >
                         📱 SMS
@@ -230,8 +230,8 @@ export default function Messagerie() {
                   <>
                     <button
                       onClick={() => {
-                        if (!form.objet.trim() || !form.contenu.trim()) { afficherToast("Remplissez l'objet et le message"); return; }
-                        addMessage({ ...form, destinataires: dest });
+                        if (!objet.trim() || !contenu.trim()) { afficherToast("Remplissez l'objet et le message"); return; }
+                        addMessage({ type, objet, contenu, expediteur, destinataires: dest });
                         if (confirm("Envoyer via WhatsApp à " + dest.length + " membres ?")) {
                           dest.forEach((id, i) => {
                             setTimeout(() => {
@@ -251,8 +251,8 @@ export default function Messagerie() {
                     </button>
                     <button
                       onClick={() => {
-                        if (!form.objet.trim() || !form.contenu.trim()) { afficherToast("Remplissez l'objet et le message"); return; }
-                        addMessage({ ...form, destinataires: dest });
+                        if (!objet.trim() || !contenu.trim()) { afficherToast("Remplissez l'objet et le message"); return; }
+                        addMessage({ type, objet, contenu, expediteur, destinataires: dest });
                         dest.forEach((id, i) => {
                           setTimeout(() => {
                             const a = adherents.find(x => x.id === id);
